@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "coordinates": {
+      "type": "coordinates",
+      "format": "coordinates"
+    },
+    "type": {
+      "type": "string",
+      "enum" : ["IN", "OUT"]
+    },
+    "is_load": {
+      "type": "boolean"
+    },
+    "id_route": {
+      "type": "integer"
+    }
+  },
+  "required": ["coordinates", "type", "is_load", "id_route"]  
+}

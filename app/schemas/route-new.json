@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id_drivers_trucks": {
+      "type": "integer"
+    },
+    "origin": {
+      "type": "coordinates",
+      "format": "coordinates"
+    },
+    "destiny": {
+      "type": "coordinates",
+      "format": "coordinates"
+    }
+  },
+  "required": ["origin", "destiny", "id_drivers_trucks"]  
+}

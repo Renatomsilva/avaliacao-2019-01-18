@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minimum": 10,
+      "maximum": 150
+    },
+    "license": {
+      "type": "string",
+      "minimum": 10,
+      "maximum": 45
+    },
+    "gender": {
+      "type": "string",
+      "minimum": 1,
+      "maximum": 1,
+      "enum" : ["M", "F"]
+    },
+    "license_type": {
+      "type": "string",
+      "minimum": 1,
+      "maximum": 1,
+      "enum" :["A", "B", "C", "D", "E", "ACC"]
+    }
+  },
+  "required": ["name", "license", "gender", "license_type"]
+}

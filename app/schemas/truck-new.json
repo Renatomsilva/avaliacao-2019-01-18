@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "enum" : [1, 2, 3, 4, 5]
+    },
+    "is_own": {
+      "type": "boolean"
+    },
+    "tag": {
+      "type": "string",
+      "minimum": 8,
+      "maximum": 8
+    }
+  },
+  "required": ["type", "is_own"]
+}

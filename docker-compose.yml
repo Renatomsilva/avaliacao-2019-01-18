@@ -1,0 +1,25 @@
+version: '2'
+services:
+  avaliacao:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: avaliacao
+    ports:
+      - "4000:4000"
+      - "5858:5858"
+    links:
+      - mysql
+  mysql:
+    image: mysql:5.7.17
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - ./mysql.cnf:/etc/mysql/conf.d/custom.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+      # - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=avaliacao
+  
