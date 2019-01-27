@@ -1,37 +1,29 @@
 require('../helpers').validateCustom;
-const { validate } = require('jsonschema');
 
-const { APIError } = require('../helpers');
+const { APIError , validateRequest} = require('../helpers');
 const { Routes, RoutesInOut } = require('../models');
 const { routeUpdateCheckinCheckout, routeByDriveIsLoadSchema } = require('../schemas')
+const { validateCheckRequest, validateBodyRequest } = validateRequest;
 
-const checkInOutRoute = async (req, res, next) => {
-  const { checkinout } = req.body;
-  const { coordinates, id_route, type } = checkinout;
-
-  const validation = validate(checkinout, routeUpdateCheckinCheckout);
-  if (!validation.valid) {
-    return next(
-      new APIError(
-        400,
-        'Bad req',
-        validation.errors.map(e => e.stack).join('. ')
-      )
-    );
-  }
-
+const validateCheckInOutRouteById = async (next , checkinout, id_route, coordinates, type) => {
   const { origin, checkin_date, checkout_date } = await Routes.getRouteById(checkinout);
   if ((!id_route && origin !== coordinates) || (type === 'IN' && checkin_date) || (type === 'OUT' && checkout_date)) {
-    return next(
-      new APIError(
+    throw new APIError(
         400,
         'Bad req',
-        'Não existe uma rota disponivél para checkin'
+        'There is an available route for checkin'
       )
-    );
   }
-  
+}
+const checkInOutRoute = async (req, res, next) => {
   try {
+    await validateBodyRequest(req.body, 'checkinout', 400, 'Bad req', 'Checkinout object not informed');
+
+    const { checkinout } = req.body;
+    const { coordinates, id_route, type } = checkinout;
+    await validateCheckRequest(next, checkinout, routeUpdateCheckinCheckout, 400, 'Bad req', undefined)
+    await validateCheckInOutRouteById(next, checkinout, id_route, coordinates, type)
+  
     const newCheckInOut = await RoutesInOut.createCheckInOut(checkinout);
     return res.status(201).json(newCheckInOut);
   } catch (err) {
@@ -43,20 +35,10 @@ const getRoutesByDriverIsLoad = async (req, res, next) => {
   const castTrue = val => val == '1' || val == 'true';
 
   const is_load  = castTrue(req.query.is_load);
-
-  const validation = validate( { is_load }, routeByDriveIsLoadSchema);
-  if (!validation.valid) {
-    return next(
-      new APIError(
-        400,
-        'Bad req',
-        validation.errors.map(e => e.stack).join('. ')
-      )
-    );
-  }
+  await validateCheckRequest({ is_load }, routeByDriveIsLoadSchema, 400, 'Bad req', undefined);
 
   try {
-    const resultDrivers = await RoutesInOut.getRoutesByDriverIsLoad(is_load || true);
+    const resultDrivers = await RoutesInOut.getRoutesByDriverIsLoad({ is_load });
     return res.json(resultDrivers);
   } catch (err) {
     return next(err);

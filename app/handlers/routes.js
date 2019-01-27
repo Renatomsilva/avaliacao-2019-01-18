@@ -1,36 +1,29 @@
 require('../helpers').validateCustom;
-const { validate } = require('jsonschema');
 
 const { Routes } = require('../models');
-const { APIError } = require('../helpers');
+const { APIError, validateRequest } = require('../helpers');
 const { routeNewSchema } = require('../schemas')
+const { validateCheckRequest, validateBodyRequest } = validateRequest;
 
-
-const createRoute = async (req, res, next) => {
-  const { route }  = req.body;
-  const validation = validate(route, routeNewSchema);
-  if (!validation.valid) {
-    return next(
-      new APIError(
-        400,
-        'Bad req',
-        validation.errors.map(e => e.stack).join('. ')
-      )
-    );
-  }
-
+const checkExistsRoute = async (next, route) => {
   const checkExistsRoute = await Routes.getRouteByDriverTruck(route);
   if(checkExistsRoute){
-    return next(
-      new APIError(
+    throw new APIError(
         400,
         'Bad req',
-        'Já existe uma rota ativa'
+        'An active route already exists'
       )
-    );
   }
+}
 
+const createRoute = async (req, res, next) => {
   try {
+    await validateBodyRequest(req.body, 'route', 400, 'Bad req', 'Route object not informed');
+    
+    const { route }  = req.body;
+    await validateCheckRequest(next, route, routeNewSchema, 400, 'Bad req', null)
+    await checkExistsRoute(next , route);
+
     const newRoute = await Routes.createRoute(route);
     return res.status(201).json(newRoute);
   } catch (err) {

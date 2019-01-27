@@ -11,7 +11,7 @@ const createDriver = async ({ name, license, gender, license_type }) => {
   } catch (err) {
     throw new APIError(
       409,
-      'Erro ao inserir motorista',
+      'Error entering driver',
       `${err}`
     );
   }
@@ -35,14 +35,14 @@ const updateDriver = async ({ name, gender, license_type }, driver_id) => {
   } catch (err) {
     throw new APIError(
       409,
-      'Erro ao inserir motorista',
+      'Error entering driver',
       `${err}`
     );
   }
 }
 
-const getDriverById = async (id) => {
-  const params = [id];
+const getDriverById = async ({driver_id}) => {
+  const params = [driver_id];
   const query = `SELECT * FROM drivers WHERE id = ?`;
 
   try {
@@ -52,7 +52,7 @@ const getDriverById = async (id) => {
 
     throw new APIError(
       409,
-      'Erro ao pesquisar caminhoneiro',
+      'Error while searching truck driver',
       `${err.sqlMessage}${process.env.DB_HOST}`
     );
   }

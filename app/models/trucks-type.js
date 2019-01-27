@@ -11,7 +11,7 @@ const getTruckTypeByCode = async ({type}) => {
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao inserir o caminhão ao motorista',
+			'Error inserting truck into driver',
 			`${err.sqlMessage}`
 		);
 	}

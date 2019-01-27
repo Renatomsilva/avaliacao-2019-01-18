@@ -1,25 +1,41 @@
 const pool = require('../config/mysql/db-context');
-const { APIError } = require('../helpers');
+const {
+	APIError
+} = require('../helpers');
 
-const createTruck = async ({ type, is_own, tag,}, { id }) => {
-	const params = [type, is_own, tag , id];
+const createTruck = async ({
+	type,
+	is_own,
+	tag,
+}, {
+	id
+}) => {
+	const params = [type, is_own, tag, id];
 	const query = `INSERT INTO drivers_trucks (id_truck_type, own_truck, tag, id_driver) VALUES (?, ?, ?, ?)`;
 
 	try {
 		const rows = await pool.query(query, params);
-		return { id: rows.insertId, type, is_own, tag, driver_id: id };
+		return {
+			id: rows.insertId,
+			type,
+			is_own,
+			tag,
+			driver_id: id
+		};
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao inserir o caminhão ao motorista',
+			'Error inserting truck into driver',
 			`${err.sqlMessage}`
 		);
 	}
 }
 
-const getTruckDriverIsOwn = async is_load => {
-  const params = [is_load];
-  const query = `SELECT 
+const getTruckDriverIsOwn = async ({
+	is_own
+}) => {
+	const params = [is_own];
+	const query = `SELECT 
    d.name
 	FROM  drivers_trucks AS dt 
 	JOIN drivers AS d 
@@ -33,16 +49,19 @@ const getTruckDriverIsOwn = async is_load => {
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao retornar motoristas',
+			'Error while returning drivers',
 			`${err.sqlMessage}`
 		);
 	}
 }
 
-const getTrucksLoadByFilter = async (day_start , day_end ) => {
-	if(!day_end)
-		day_end = day_start;
-	const params = [day_start , day_end];
+const getTrucksLoadByFilter = async ({
+	start_day,
+	end_day
+}) => {
+	if (!end_day)
+		end_day = start_day;
+	const params = [start_day, end_day];
 	const query = `SELECT 
 		count(*) as count_trucks
 	FROM route AS r 
@@ -58,11 +77,11 @@ const getTrucksLoadByFilter = async (day_start , day_end ) => {
 	ORDER BY 1 DESC`;
 	try {
 		const rows = await pool.query(query, params);
-		return rows || undefined;
+		return rows[0] || undefined;
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao retornar motoristas',
+			'Error while returning drivers',
 			`${err.sqlMessage}`
 		);
 	}

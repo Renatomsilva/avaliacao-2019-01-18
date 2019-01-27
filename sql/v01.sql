@@ -116,6 +116,13 @@ CREATE TABLE `truck_type` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=UTF8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+LOCK TABLES `truck_type` WRITE;
+/*!40000 ALTER TABLE `truck_type` DISABLE KEYS */;
+INSERT INTO `truck_type` VALUES (1,1,'Caminhão 3/4'),(2,2,'Caminhão Toco'),(3,3,'Caminhão Truck'),(4,4,'Caminhão Simples'),(5,5,'Carreta Eixo Extendido');
+/*!40000 ALTER TABLE `truck_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 --
 -- Dumping events for database 'avaliacao'
 --

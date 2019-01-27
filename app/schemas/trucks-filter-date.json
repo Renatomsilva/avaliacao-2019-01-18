@@ -3,14 +3,14 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "day_start": {
+    "start_day": {
       "type": "dateFormat",
       "format": "dateFormat"
     },
-    "day_end": {
+    "end_day": {
       "type": "dateFormat",
       "format": "dateFormat"
     }
   },
-  "required": ["day_start"]
+  "required": ["start_day"]
 }

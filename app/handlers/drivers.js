@@ -1,24 +1,25 @@
-const { validate } = require('jsonschema');
-
 const { Drivers } = require('../models');
-const { APIError } = require('../helpers');
+const { APIError, validateRequest} = require('../helpers');
 const { driverNewSchema, driverUpdateSchema } = require('../schemas')
+const { validateCheckRequest, validateBodyRequest } = validateRequest;
 
-const createDriver = async (req, res, next) => {
-  const { driver } = req.body;
-
-  const validation = validate(driver, driverNewSchema);
-  if (!validation.valid) {
-    return next(
-      new APIError(
+const verifyDriverById = async ( next , driver_id ) => {
+  const driversVerify = await Drivers.getDriverById({driver_id})
+  if (!driversVerify.length || !driver_id) {
+    throw new APIError(
         400,
         'Bad req',
-        validation.errors.map(e => e.stack).join('. ')
+        'Truck driver not found'
       )
-    );
   }
+}
 
+const createDriver = async (req, res, next) => {
   try {
+    await validateBodyRequest(req.body, 'driver', 400, 'Bad req', 'Driver object not informed');
+    const { driver } = req.body;
+    await validateCheckRequest(next, driver, driverNewSchema, 400, 'Bad req', undefined);
+  
     const newDriver = await Drivers.createDriver(driver);
     return res.status(201).json(newDriver);
   } catch (err) {
@@ -27,32 +28,14 @@ const createDriver = async (req, res, next) => {
 }
 
 const updateDriver = async (req, res, next) => {
-  const { driver } = req.body;
-  const { driver_id } = req.params;
-
-  const validation = validate(driver, driverUpdateSchema);
-  if (!validation.valid) {
-    return next(
-      new APIError(
-        400,
-        'Bad req',
-        validation.errors.map(e => e.stack).join('. ')
-      )
-    );
-  }
-
-  const driversVerify = await Drivers.getDriverById(driver_id)
-  if (!driversVerify.length || !driver_id) {
-    return next(
-      new APIError(
-        400,
-        'Bad req',
-        'Caminhoneiro não encontrado'
-      )
-    );
-  }
-
   try {
+    await validateBodyRequest(req.body, 'driver', 400, 'Bad req', 'Driver object not informed');
+    
+    const { driver } = req.body;
+    const { driver_id } = req.params;
+    await validateCheckRequest(next, driver, driverUpdateSchema, 400, 'Bad req', undefined);
+    await verifyDriverById(next, driver_id);
+
     const newDriver = await Drivers.updateDriver(driver, driver_id);
     return res.status(201).json(newDriver);
   } catch (err) {

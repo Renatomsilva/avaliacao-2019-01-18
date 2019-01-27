@@ -4,7 +4,7 @@ const router = new express.Router();
 const { getTrucksLoadByFilter, createTruck } = trucksHandler;
 
 router
-  .route('/trucks')
+  .route('')
   .put(createTruck);
 
 router

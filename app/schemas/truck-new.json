@@ -18,5 +18,5 @@
       "maximum": 8
     }
   },
-  "required": ["type", "is_own"]
+  "required": ["type", "is_own", "tag"]
 }

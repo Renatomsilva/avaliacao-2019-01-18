@@ -15,7 +15,7 @@ const createCheckInOut = async ({ is_load, type, id_route }) => {
   } catch (err) {
     throw new APIError(
       409,
-      'Erro ao inserir a rota',
+      'Error entering route',
       `${err.sqlMessage}`
     );
   }
@@ -45,13 +45,13 @@ const getLastRouteCheckOut = async ({id_drivers_trucks}) => {
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao inserir o caminhão ao motorista',
+			'Error inserting truck into driver',
 			`${err.sqlMessage}`
 		);
 	}
 }
 
-const getRoutesByDriverIsLoad = async is_load => {
+const getRoutesByDriverIsLoad = async ({ is_load }) => {
   const params = [is_load, is_load];
   const query = `SELECT 
    d.name
@@ -71,7 +71,7 @@ const getRoutesByDriverIsLoad = async is_load => {
 	} catch (err) {
 		throw new APIError(
 			409,
-			'Erro ao retornar motoristas',
+			'Error while returning drivers',
 			`${err.sqlMessage}`
 		);
 	}
