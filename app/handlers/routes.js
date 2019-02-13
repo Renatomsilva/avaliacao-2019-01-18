@@ -1,9 +1,7 @@
 require('../helpers').validateCustom;
 
 const { Routes } = require('../models');
-const { APIError, validateRequest } = require('../helpers');
-const { routeNewSchema } = require('../schemas')
-const { validateCheckRequest, validateBodyRequest } = validateRequest;
+const { APIError } = require('../helpers');
 
 const checkExistsRoute = async (next, route) => {
   const checkExistsRoute = await Routes.getRouteByDriverTruck(route);
@@ -18,12 +16,8 @@ const checkExistsRoute = async (next, route) => {
 
 const createRoute = async (req, res, next) => {
   try {
-    await validateBodyRequest(req.body, 'route', 400, 'Bad req', 'Route object not informed');
-    
     const { route }  = req.body;
-    await validateCheckRequest(next, route, routeNewSchema, 400, 'Bad req', null)
     await checkExistsRoute(next , route);
-
     const newRoute = await Routes.createRoute(route);
     return res.status(201).json(newRoute);
   } catch (err) {

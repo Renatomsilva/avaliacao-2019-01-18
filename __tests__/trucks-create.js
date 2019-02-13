@@ -26,6 +26,7 @@ describe('Create Truck', () => {
       json: requestTruck
     });
     const responseBody = JSON.parse(response.body.toString());
+    console.log(responseBody);
     expect(responseBody.id).to.be.gt(0);
     expect(responseBody.type).to.be.equal(requestTruck.truck.type);
     expect(responseBody.is_own).to.be.equal(requestTruck.truck.is_own);
