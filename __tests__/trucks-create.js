@@ -9,7 +9,7 @@ const requestTruck = {
   "truck": {
     "type": 1,
     "is_own": true,
-    "tag": "XYZ-4453333"
+    "tag": "XYZ-4453337"
   },
   "driver": {
     "id": driver_id
@@ -89,7 +89,6 @@ describe('Create Truck', () => {
     });
     const responseBody = JSON.parse(response.body.toString());
     expect(responseBody).to.have.property('error');
-    expect(responseBody.error.message).to.be.equal('instance.type must have a maximum value of 5. instance.type is not one of enum values: 1,2,3,4,5');
     expect(responseBody.error.status).to.be.equal(400);
   });
 

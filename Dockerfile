@@ -22,4 +22,4 @@ EXPOSE 4000
 
 EXPOSE 5858
 
-CMD ["node", "--inspect=5858","./app/server.js"]
+CMD ["node", "--trace-events-enabled --trace-event-categories v8,node,node.async_hooks --inspect=5858","./app/server.js"]

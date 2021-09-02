@@ -53,7 +53,7 @@ const getLastRouteCheckOut = async ({id_drivers_trucks}) => {
 
 const getRoutesByDriverIsLoad = async ({ is_load }) => {
   const params = [is_load, is_load];
-  const query = `SELECT 
+  const query = `SELECT   
    d.name
   FROM route AS r 
   JOIN route_in_out as ri 

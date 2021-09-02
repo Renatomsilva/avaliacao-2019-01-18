@@ -29,6 +29,7 @@ describe('Truck Loads', () => {
     });
     const responseBody = JSON.parse(response.body.toString());
     expect(responseBody).to.be.an('object');
+
     expect(responseBody.count_trucks).to.be.gt(0);
   });
 

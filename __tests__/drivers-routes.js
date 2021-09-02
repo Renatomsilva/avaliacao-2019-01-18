@@ -24,7 +24,6 @@ describe('Get Divers Routes', () => {
       }
     });
     const responseBody = JSON.parse(response.body.toString());
-    console.log(responseBody);
     expect(responseBody).to.be.an('array');
   });
 
